@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Component</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	 crossorigin="anonymous">
+	<script src="compose.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+	<script src="node_modules/jquery/dist/jquery.js"></script>
+
+</head>
+
+<body class="container">
+
+	<h1>Super power of inheritance and composition</h1>
+	<p>We all know that Objects in Javascript are very powerful.</p>
+	<p>I bet you heard a lot about how you can use about prototypal inheritance and composition.</p>
+	<p>Can we use both efficiently?</p>
+
+
+
+	<p>Let's build a mini incremental game.</p>
+	<h2>Phase 1. Composition</h2>
+	<div class="card" style="width: 18rem;">
+
+		<div class="card-body">
+			<p>Click to get more powerful!</p>
+			<button class="btn btn-primary" id="example1">Click to start</button>
+		</div>
+	</div>
+	<script>
+
+		// Display the power
+		let display = {
+			power: 0,
+			display: function () {
+				this.innerHTML = this.power;
+			}
+		}
+
+		// Get more power };)
+		let increment = {
+			amount: 1,
+			increment: function () {
+				this.power += this.amount;
+			}
+		}
+
+
+		document.addEventListener('DOMContentLoaded', function () {
+			let btn = document.querySelector('#example1');
+
+			Object.assign(btn, increment, display);
+
+			btn.addEventListener('click', function () {
+				this.increment();
+				this.display();
+			});
+		});
+
+
+	</script>
+	<p>We can use getters and setter to detect power changes and display.</p>
+	<div class="card" style="width: 18rem;">
+
+		<div class="card-body">
+			<p>Click to get more powerful!</p>
+			<button class="btn btn-primary" id="example2">Click to start</button>
+		</div>
+	</div>
+	<script>
+		// Changing our display feature
+		let display2 = {
+			format: function (value) {
+				return Math.round(value);
+			},
+			display: function () {
+				this.innerHTML = this.format(this.power);
+			}
+		}
+		
+		// Use setter to detect changes and 
+		Object.defineProperty(display2, 'power', {
+			configurable: true,
+			get: function () {
+				return this._value || 0;
+			},
+			set: function (newValue) {
+				this._value = newValue;
+				this.display();
+			}
+		});
+
+		document.addEventListener('DOMContentLoaded', function () {
+			let btn = document.querySelector('#example2');
+
+			Object.assign(btn, increment, display2);
+
+			btn.addEventListener('click', function () {
+				this.increment();
+				if (!this._value) {
+					this.innerHTML = 'Broken';
+					this.classList.add('btn-danger');
+				}
+			});
+		});
+	</script>
+	<p>Problem is that Object.assign method won't apply property descriptors to the target object.</p>
+	<p>We can fix that by using Object.defineProperty and Object.getOwnPropertyDescriptor.</p>
+	<div class="card" style="width: 18rem;">
+		<div class="card-body">
+			<p>Click to get more powerful!</p>
+			<button class="btn btn-primary" id="example31">Workaround</button>
+			<button class="btn btn-success" id="example32">Elegant</button>
+		</div>
+	</div>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			let btn = document.querySelector('#example31');
+
+			Object.assign(Object.defineProperty(btn, 'power', Object.getOwnPropertyDescriptor(display2, 'power')), increment, display2);
+
+			btn.addEventListener('click', function () {
+				this.increment();
+			});
+		});
+	</script>
+	<p>More elegant solution would be to use a helper "compose" function.</p>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			let btn = document.querySelector('#example32');
+			compose(btn, increment, display2).addEventListener('click', function () {
+				this.increment();
+			});	
+		});	
+	</script>
+	<p>No it is much easier to use composition and consider property descriptors.</p>
+	<h2>Phase 2. Inheritance</h2>
+	<p>Let's finish our games and highlight inheritance</p>
+	<div class="card" style="width: 18rem;" id="phase2">
+		<div class="card-body" >
+			<p>Click to get more powerful!</p>
+			<button class="btn btn-success" id="example41">Inherit</button>			
+		</div>
+	</div>	
+	
+	<script>
+		
+		// Define new feature to upgrade 
+		let upgrade = Object.defineProperty(		
+			{				
+				level:1,
+				upgradEl: null,
+				upgradeCost: function() {					
+					return this.level*10;
+				},
+				// Upgrade to increment faster
+				upgrade: function() {
+					this.power -= this.upgradeCost();
+					this.amount *= 2;					
+					this.level++;					
+					this.setupUpgradeElement();
+				},
+				setupUpgradeElement: function() {
+					var self = this;
+					var el = this.upgradeEl;
+					if (!el) {
+						el = document.createElement('a');
+						this.upgradeEl = el;
+						el.innerHTML = " Upgrade $" + self.upgradeCost();
+						el.setAttribute('href', "javascript:;");
+						el.classList.add('badge', 'badge-success');
+						el.addEventListener('click', function(event) {
+							
+							self.upgrade();
+							return false;
+						})
+						self.parentElement.appendChild(el);
+					}
+					el.innerHTML = 'Upgrade $' + this.upgradeCost();
+					if (this.upgradeCost() <= this.power) {
+						el.classList.remove('disabled');
+					} else {
+						el.classList.add('disabled');						
+					}
+					return true;
+				},
+
+				//  Detect if we can upgrade and 
+				detectUpgrade: function() {	
+					if (this.upgradeCost() <= this.power) {			
+						this.upgradeEl  = this.parentElement.querySelector('.badge');
+						this.setupUpgradeElement();
+					}
+				}
+			}, 
+			// Override definition to detect if we can upgrade
+			'power', 
+			{
+				get: function () {
+					return this._value || 0;
+				},
+				set: function (newValue) {
+					this._value = newValue;
+					this.detectUpgrade();
+					this.display();
+				}
+			}
+		);
+
+		// Let combine all features together in one object.
+		let powerButton = compose(Object.create(Object.getOwnPropertyDescriptors(display2)), increment, upgrade);
+
+		// The easier way is to use our shortcut "inherit"
+		powerButton = inherit(display2, increment, upgrade);
+		
+
+		document.addEventListener('DOMContentLoaded', function () {
+			// Use our original button as a prototype
+			let btn = document.querySelector('#example41');
+
+			// Apply our powerButton
+			compose(btn, powerButton).addEventListener('click', function () {
+				this.increment();
+			});	
+			
+		});
+	</script>
+
+</body>
