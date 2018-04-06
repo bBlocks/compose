@@ -7,7 +7,8 @@
     "watch": "npm-watch",
     "doc": "./node_modules/.bin/jsdoc compose.js -d docs/api/",
     "min": "node ./node_modules/uglify-js/bin/uglifyjs compose.js -c -m -o compose.min.js",
-    "build": "node ./node_modules/umd/bin/cli.js returnExportsGlobal compose.js compose.umd.js"
+    "build": "node ./node_modules/umd/bin/cli.js returnExportsGlobal compose.js compose.umd.js",
+    "babel": "./node_modules/.bin/babel compose.js --out-file compose.umd.js"
   },
   "watch": {
     "min": "compose.js",
@@ -25,6 +26,9 @@
   "homepage": "https://github.com/bBlocks/compose#readme",
   "dependencies": {},
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "jasmine": "^2.6.0",
     "jquery": "^3.3.1",
     "jsdoc": "^3.4.3",
