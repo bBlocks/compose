@@ -23,7 +23,9 @@
     "url": "https://github.com/bBlocks/compose/issues"
   },
   "homepage": "https://github.com/bBlocks/compose#readme",
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.5"
+  },
   "devDependencies": {
     "jasmine": "^2.6.0",
     "jquery": "^3.3.1",
