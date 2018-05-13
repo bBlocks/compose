@@ -9,14 +9,21 @@
 	 crossorigin="anonymous">
 	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
-	<script src="compose.umd.js"></script>	
-	<script src="node_modules/jquery/dist/jquery.js"></script>	
-
+	<script src="../compose.umd.js"></script>	
+	<!--<script src="https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.0/compose.umd.js"></script>-->
+	<script>		
+		// Expose handy methods with loadash style
+		var _ = _ || {};
+		_.Block = compose.Block;
+		_.block = compose.block;
+		_.inherit = compose.inherit;
+		_.compose = compose.compose;
+	</script>
 </head>
 
 <body class="container">
-
 	<h1>Super power of inheritance and composition</h1>
+	<p>I am a fun of prototypal inheritance. I hope you like it too. ES5 introduced several powerful features to Javascript. One of which is property descriptors</p>
 	<p>If you already familiar with advance parts fo</p>
 	<p>I bet you heard a lot about how you can use about prototypal inheritance and composition.</p>
 	<p>Can we use both efficiently?</p>
@@ -229,12 +236,21 @@
 				this.increment();
 			});	
 
-			$(btn).on({
-				click: function() {
-
-				}
-			})
 			
 		});
+	</script>
+	<script>
+		var myObject = new _.Block();
+		var myClone = myObject.mix({test:1}).clone({car:2}).define({
+			"prop1": {
+				get: function() {
+					return this._prop1 || null;
+				},
+				set: function(newValue) {
+					this._prop1 = newValue;
+				}
+			},
+		});	
+		console.log(myObject, myClone);
 	</script>
 </body>

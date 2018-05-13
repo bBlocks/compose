@@ -7,15 +7,16 @@
  * @return {object} Target object.
 */
 function compose() {
-	var args = arguments;
-	var source = args[0];
+	var args = arguments,
+		source = args[0];
+	
 	if (source == undefined) { return; }
 	if (args.length <= 1) { return source; }
 
-	for (let i = 1; i < args.length; i++) {
+	for (var i = 1; i < args.length; i++) {
 		let obj = args[i];
 		if (typeof obj != 'object') {
-			console.warn('Invalid parameter type "' + (typeof obj) + '" for the parameter #' + i);
+			console.warn('Invalid parameter type "' + (typeof obj) + '" for the argument #' + i);
 			continue;
 		}
 		Object.defineProperties(source, Object.getOwnPropertyDescriptors(obj));
@@ -101,11 +102,30 @@ if (!Object.assign) {
 	});
 }
 
-function enhance(element) {	
-	if (arguments.length >1) {		
-		compose.apply(null, arguments);
-	};
-	return element;
+/**
+ * Building block with handy methods
+ */
+let block = {
+	mix: function() {
+		Array.prototype.unshift.call(arguments, this);
+		compose.apply(this, arguments);
+		return this;
+	},
+	clone: function() {
+		Array.prototype.unshift.call(arguments, this);
+		return inherit.apply(this, arguments);
+	},
+	define: function() {
+		if (!arguments.length) {return this;}
+		for (let i=0; i<arguments.length; i++) {
+			Object.defineProperties(this, arguments[i]);
+		}
+		return this;
+	}
+}
+let Block = function() {
+	Array.prototype.unshift.call(arguments, this);
+	compose.apply(this, arguments);
 };
-
-export {compose, inherit, enhance};
+Block.prototype = block;
+export {compose, inherit, block, Block};

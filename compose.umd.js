@@ -23,15 +23,17 @@
 		return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 	};
 
+	/** @module bb/compose */
+
 	/** 
   * Compose two or more objects
   * @param {...object} Objects to compose.  target, source1, source2, ...
   * @return {object} Target object.
-  * @memberof bb
  */
 	function compose() {
-		var args = arguments;
-		var source = args[0];
+		var args = arguments,
+		    source = args[0];
+
 		if (source == undefined) {
 			return;
 		}
@@ -42,7 +44,7 @@
 		for (var i = 1; i < args.length; i++) {
 			var obj = args[i];
 			if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) != 'object') {
-				console.warn('Invalid parameter type "' + (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) + '" for the parameter #' + i);
+				console.warn('Invalid parameter type "' + (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) + '" for the argument #' + i);
 				continue;
 			}
 			Object.defineProperties(source, Object.getOwnPropertyDescriptors(obj));
@@ -54,7 +56,6 @@
   * Inherit and compose
   * @param {...object} Prototype and optional additional sources for composition
   * @return {object} New object created from the prototype and results of composition
-  * @memberof bb
  */
 	function inherit() {
 		var args = arguments;
@@ -126,14 +127,36 @@
 		});
 	}
 
-	function enhance(element) {
-		if (arguments.length > 1 && window.bb && window.bb.compose) {
-			compose.apply(null, arguments);
-		};
-		return element;
+	/**
+  * Building block with handy methods
+  */
+	var block = {
+		mix: function mix() {
+			Array.prototype.unshift.call(arguments, this);
+			compose.apply(this, arguments);
+			return this;
+		},
+		clone: function clone() {
+			Array.prototype.unshift.call(arguments, this);
+			return inherit.apply(this, arguments);
+		},
+		define: function define() {
+			if (!arguments.length) {
+				return this;
+			}
+			for (var i = 0; i < arguments.length; i++) {
+				Object.defineProperties(this, arguments[i]);
+			}
+			return this;
+		}
 	};
-
+	var Block = function Block() {
+		Array.prototype.unshift.call(arguments, this);
+		compose.apply(this, arguments);
+	};
+	Block.prototype = block;
 	exports.compose = compose;
 	exports.inherit = inherit;
-	exports.enhance = enhance;
+	exports.block = block;
+	exports.Block = Block;
 });

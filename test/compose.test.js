@@ -1,6 +1,6 @@
 
 describe('compose', function() {
-	var compose = window && bb.compose || global.compose;
+	var compose = window && window.compose.compose || global.compose;
 	it('compose objects', function() {
 		var foo = function() {};
 		var obj = {test:1};
@@ -80,7 +80,7 @@ describe('compose', function() {
 	})
 });
 describe("inherit", function () {
-	var inherit = window && bb.inherit || global.inherit;
+	var inherit = window && window.compose.inherit || global.compose.inherit;
 	it("A shortcut for prototypal inheritance with composition", function () {
 		var foo = function() {};
 		var obj = {test:1};

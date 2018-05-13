@@ -4,15 +4,16 @@
   "description": "",
   "main": "compose.js",
   "scripts": {
+    "md": "node md2html.js",
     "watch": "npm-watch",
     "doc": "./node_modules/.bin/jsdoc compose.js -d docs/api/",
-    "min": "node ./node_modules/uglify-js/bin/uglifyjs compose.js -c -m -o compose.min.js",
-    "build": "node ./node_modules/umd/bin/cli.js returnExportsGlobal compose.js compose.umd.js",
-    "babel": "./node_modules/.bin/babel compose.js --out-file compose.umd.js"
+    "min": "node ./node_modules/uglify-js/bin/uglifyjs compose.js -c -m --source-map -o compose.min.js",
+    "minumd": "node ./node_modules/uglify-js/bin/uglifyjs compose.umd.js -c -m --source-map --includeSources -o compose.umd.min.js",
+    "build": "./node_modules/.bin/babel compose.js --out-file compose.umd.js"
   },
   "watch": {
-    "min": "compose.js",
-    "doc": "compose.js"
+	"build": "compose.js",
+	"md": "README.MD"
   },
   "repository": {
     "type": "git",
@@ -24,31 +25,15 @@
     "url": "https://github.com/bBlocks/compose/issues"
   },
   "homepage": "https://github.com/bBlocks/compose#readme",
-  "dependencies": {
-    "lodash": "^4.17.5"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "jasmine": "^2.6.0",
-    "jquery": "^3.3.1",
     "jsdoc": "^3.4.3",
+    "marked": "^0.3.19",
     "npm-watch": "^0.1.9",
-    "uglify-js": "^3.0.15",
-    "webpack": "^4.0.1",
-    "webpack-cli": "^2.0.10"
-  },
-  "browserify": {
-    "transform": [
-      [
-        "babelify",
-        {
-          "presets": [
-            "es2015"
-          ]
-        }
-      ]
-    ]
+    "uglify-js": "^3.0.15"
   }
 }
