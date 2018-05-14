@@ -1,6 +1,9 @@
 
+var _ = _ || {};
+Object.assign(_, window ? window.compose : global.compose);
+console.log(_);
+
 describe('compose', function() {
-	var compose = window && window.compose.compose || global.compose;
 	it('compose objects', function() {
 		var foo = function() {};
 		var obj = {test:1};
@@ -8,8 +11,8 @@ describe('compose', function() {
 		var obj1  = {prop1: 1, prop2: foo, prop3: obj};
 		var obj2 = {prop4: 2, prop1: 2};
 
-		expect(typeof compose).toBe('function');
-		var obj11 = compose(obj1, obj2);
+		expect(typeof _.compose).toBe('function');
+		var obj11 = _.compose(obj1, obj2);
 		expect(obj11).toBe(obj1);
 		expect(obj11.prop1).toBe(2);
 		expect(obj11.prop4).toBe(2);
@@ -50,7 +53,7 @@ describe('compose', function() {
 		});
 
 
-		compose(obj1, obj2);
+		_.compose(obj1, obj2);
 
 		expect(obj1.prop1).toBe('getProp1=0');
 		obj1.prop1 = 1;
@@ -60,7 +63,7 @@ describe('compose', function() {
 		expect(obj1.prop2).toBe('prop2ReadOnly');
 
 		try {
-			compose(obj1, {prop3: 3});
+			_.compose(obj1, {prop3: 3});
 		} catch(error) {
 			expect(error).toBeTruthy();
 		}
@@ -72,15 +75,14 @@ describe('compose', function() {
 	it('inherited properties', function() {
 		var parent = {prop:1};
 		var child = Object.create(parent);
-		compose(child, {prop2: 2});
+		_.compose(child, {prop2: 2});
 		expect(child.prop).toBe(1);
 		var child3 = Object.create({prop3: 3});
-		compose(child3, {prop2: 2});
+		_.compose(child3, {prop2: 2});
 		expect(child3.prop3).toBe(3);
 	})
 });
 describe("inherit", function () {
-	var inherit = window && window.compose.inherit || global.compose.inherit;
 	it("A shortcut for prototypal inheritance with composition", function () {
 		var foo = function() {};
 		var obj = {test:1};
@@ -88,8 +90,29 @@ describe("inherit", function () {
 		var obj1 = {prop1: 1, prop2: foo, prop3: obj};
 		var obj2 = {prop2:2};
 
-		var obj11 = inherit(obj1);
+		var obj11 = _.inherit(obj1);
 		expect(obj1.isPrototypeOf(obj11)).toBeTruthy();
 		expect(obj11.prop2).toBeTruthy();
+	});
+});
+
+describe("Block", function() {
+
+	it('Can clone, mix and define properties', function() {
+		// create new objects 
+		var obj = new _.Block({prop1:1}); 
+		expect(Object.getPrototypeOf(obj)).toBe(_.block);
+
+		// composing with other objects
+		obj.mix({prop2: 2}); 
+
+		// configuring properties with descriptors
+		obj.define({prop3: {get: function() {return 3;}}});
+
+		// inherit
+		var myClone = obj.clone({prop4: 4});
+
+		// Checking results
+		expect(myClone.prop1 + myClone.prop2 + myClone.prop3 + myClone.prop4).toBe(10); // 1 + 2 + 3 + 4 = 10
 	});
 });

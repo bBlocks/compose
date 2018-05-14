@@ -22,8 +22,11 @@
 <body>
 <article class="markdown-body">
 <h1 id="discover-super-powers-of-composition-and-inheritance-in-javascript-with-compose-library">Discover super powers of composition and inheritance in javascript with compose library</h1>
-<p><a href="#quick-start">Quick start</a>
-<a href="#discover-super-powers-of-composition-and-inheritance-in-javascript-with-compose-library">Solving: Composition of object with property descriptors</a></p>
+<p>Jump to </p>
+<p><a href="#quick-start">Quick start</a></p>
+<p><a href="#discover-super-powers-of-composition-and-inheritance-in-javascript-with-compose-library">Solving problem: Composition of objects keeping property descriptors</a></p>
+<p>[Solving problem: IE11 doesn&#39;t support Object.assign, Object.getOwnPropertyDescriptors]</p>
+<p>[Solving problem: ]</p>
 <h2 id="quick-start">Quick start</h2>
 <p>install</p>
 <pre><code class="lang-nmp">npm install @bblocks/compose --save-dev
@@ -48,8 +51,8 @@ _.compose({prop1: 1}, {prop2: 2});
 _.inherit({prop1: 1}, {prop2: 2}, {foo: function() {}});
 
 // Handy object with built-in features to compose, clone and define properties
-let myObj = new _.Block({prop1:1}); // Our building block
-let myClone = myObj
+var myObj = new _.Block({prop1:1}); // Our building block
+var myClone = myObj
     .mix({prop2:2}) 
     .define({
         prop3: {
@@ -58,13 +61,14 @@ let myClone = myObj
     })
     .clone({prop4: 4});
 
-// Check results we created
+// Check results
 console.log(myClone.__proto__, myClone.prop1, myClone.prop2, myClone.prop3, myClone.prop4); // {...} 1 2 3 4
 </code></pre>
-<h2 id="since-es5-object-in-javascript-became-more-powerful-thanks-to-property-descriptors-">Since ES5 Object in javascript became more powerful. Thanks to property descriptors.</h2>
+<h2 id="problem-composition-of-objects-keeping-property-descriptors">Problem: Composition of objects keeping property descriptors</h2>
+<p>Since ES5 Object in javascript became more powerful. Thanks to property descriptors. </p>
 <p>In the first example we create and object that can display numbers with suffixes like 1M, 1k, 1b etc...</p>
 <pre><code class="lang-javascript">// Display big numbers with suffixes
-let bigNumber = {
+var bigNumber = {
     suffixes: [&quot;&quot;, &quot;k&quot;, &quot;m&quot;, &quot;b&quot;,&quot;t&quot;],
     toString: function (value) {
         var newValue = value;
@@ -98,20 +102,20 @@ Object.defineProperty(bigNumber, &#39;value&#39;, {
     }
 });
 // Create a new instance
-let myNumber = Object.create(bigNumber);
+var myNumber = Object.create(bigNumber);
 myNumber.value = 1000;
 console.log(myNumber.value + &#39; = &#39; + myNumber.stringValue); // 1000 = 1k
 </code></pre>
-<h2 id="i-discovered-a-problem-that-we-loose-all-properties-descriptors-when-we-try-to-compose-two-objects-">I discovered a problem that we loose all properties descriptors when we try to compose two objects.</h2>
-<pre><code class="lang-javascript">//  Define a new feature to increment a number
-let increment = {
+<p>I discovered a problem that we loose all property descriptors when we try to compose two objects.</p>
+<pre><code class="lang-javascript">// Define a new feature to increment a number
+var increment = {
     increment: function() {
         this.value = (this.value || 0) + 1;
     }
 }
 
 // Compose increment and big number features  
-let incNumber = Object.create(increment);
+var incNumber = Object.create(increment);
 Object.assign(incNumber, bigNumber);
 
 incNumber.increment(); // value = 1;
@@ -119,21 +123,68 @@ incNumber.increment(); // value = 1;
 console.log(incNumber.value); // 1
 console.log(incNumber.stringValue); // undefined :(
 </code></pre>
-<p>So we lost all the magic after composition. Solution to this problem looks bulky.</p>
-<pre><code class="lang-javascript">Object.defineProperties(incNumber, Object.getOwnPropertyDescriptors(bigNumber));
-incNumber.increment(); // value = 1;
-console.log(incNumber.stringValue); // 1  Yes!!!
-</code></pre>
-<p>But we still have a problem because Object.assign and Object.getOwnPropertyDescriptors are not supported in IE11. Oh no ;(</p>
-<p>// Re-define our mixed object
-let myIncNumber = _.inherit(increment);
+<p>So we lost all the magic after composition. But you can use &quot;compose&quot; or &quot;inherit&quot; methods from the library to solve this problem.</p>
+<pre><code class="lang-javascript">// Re-define our mixed object
+var myIncNumber = _.inherit(increment);
 _.compose(myIncNumber, bigNumber);
 // or
-let myIncNumber2 = _.inherit(increment, bigNumber);</p>
-<p>myIncNumber.increment();
+var myIncNumber2 = _.inherit(increment, bigNumber);
+
+
+myIncNumber.increment();
 myIncNumber2.value = 1000;
 console.log(myIncNumber.stringValue, myIncNumber2.stringValue); // 1, 1k
-<code>`</code></p>
+</code></pre>
+<h2 id="ie11-doesn-t-support-object-assign-object-getownpropertydescriptors">IE11 doesn&#39;t support Object.assign, Object.getOwnPropertyDescriptors</h2>
+<p>We can use native javascript function Object.assign for composition.</p>
+<pre><code class="lang-javascript">var sourceObj = {prop1:1};
+Object.assign(sourceObj, {prop2: 2}); // Fails in IE11
+console.log(sourceObj.prop1 + sourceObj.prop2); // 3
+</code></pre>
+<p>But in order to keep descriptors we need to use something like this. </p>
+<pre><code class="lang-javascript">var sourceObj = {prop1:1};
+var extraObj = Object.defineProperty({}, &#39;prop2&#39;, {get: function() {return 2;}});
+Object.defineProperties(sourceObj, Object.getOwnPropertyDescriptors(extraObj)); // Fails in IE11. Object doesn&#39;t support property or method &#39;getOwnPropertyDescriptors&#39;
+console.log(sourceObj.prop1 + sourceObj.prop2); // 3
+</code></pre>
+<p>Besides helpful compose and inherit methods the library goes with two polyfills. Including the library automatically fixes the problem in IE11.</p>
+<h2 id="bulky-code-to-define-properties-inherit-and-compose-object-using-native-javascript-methods-">Bulky code to define properties, inherit and compose object using native javascript methods.</h2>
+<p>The example above looks bulky in native JS code. </p>
+<pre><code class="lang-javascript">var sourceObj = {prop1:1};
+var extraObj = Object.defineProperty({}, &#39;prop2&#39;, {get: function() {return 2;}});
+Object.defineProperties(sourceObj, Object.getOwnPropertyDescriptors(extraObj));
+console.log(sourceObj.prop1 + sourceObj.prop2); // 3
+</code></pre>
+<p>Library has a bonus for you. A handy Block you can start with.</p>
+<pre><code class="lang-javascript">var extraObj = (new _.Block()).define({prop2: {get: function() {return 2;}}});
+var sourceObj = (new _.Block({prop1:1})).mix(extraObj);
+console.log(sourceObj.prop1 + sourceObj.prop2); // 3
+</code></pre>
+<p>Let me explain step by step.</p>
+<pre><code class="lang-javascript">// create new objects 
+var obj = new _.Block({prop1:1}); 
+
+// composing with other objects
+obj.mix({prop2: 2}); 
+
+// configuring properties with descriptors
+obj.define({prop3: {get: function() {return 3;}}});
+
+// inherit
+var myClone = obj.clone({prop4: 4});
+
+// Checking results
+console.log(myClone.prop1 + myClone.prop2 + myClone.prop3 + myClone.prop4); // 1 + 2 + 3 + 4 = 10
+
+// You can use multiple arguments and chaining
+var myClone = (new _.Block({prop1: 1}))
+        .mix({prop2: 2})
+        .define({prop3: {get: function() {return 3;}}})
+        .clone({prop4: 4});
+
+// Checking results
+console.log(myClone.prop1 + myClone.prop2 + myClone.prop3 + myClone.prop4); // 1 + 2 + 3 + 4 = 10
+</code></pre>
 </article>
 <script src="demo.js"></script>
 </body>
