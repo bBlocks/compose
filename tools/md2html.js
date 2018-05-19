@@ -37,7 +37,7 @@ href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/de
 <body>
 <article class="markdown-body">
 ${marked(data.toString())}</article>
-<script src="../tools/demo.js"></script>
+<script src="demo.js"></script>
 </body>
 </html>`;
 		this.push(html);

@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (cls == 'lang-javascript') {
 			executeExample(example);
 		}
+		hljs.highlightBlock(example);
 	}
 
 });
