@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
+	<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.css"/>
+	<style>
+		.markdown-body {
+			box-sizing: border-box;
+			min-width: 200px;
+			max-width: 980px;
+			margin: 0 auto;
+			padding: 45px;
+		}
+
+		@media (max-width: 767px) {
+			.markdown-body {
+				padding: 15px;
+			}
+		}
+	</style>
+	<script src="../compose.umd.js"></script>
+</head>
+<body>
+<article class="markdown-body">
+<h1 id="want-to-have-some-fun-with-objects-">Want to have some fun with Objects?</h1>
+<p>Let&#39;s use <a href="index.html">compose library</a> to  build a mini incremental game.</p>
+<h2 id="install-and-include-the-library-">Install and include the library.</h2>
+<pre><code class="lang-html">&lt;!-- include the library --&gt;
+&lt;script src=&quot;../compose.umd.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<pre><code class="lang-javascript">// Optionally create shortcuts in lodash style 
+var _ = Object.assign(_ || {}, compose); // Now you can use it like _.mix(...)  _.clone(...)  new _.Block(...) _.block
+
+</code></pre>
+<h2 id="create-a-bignumber-feature">Create a bigNumber feature</h2>
+<p>We can improve our original example to make it more efficient.</p>
+<pre><code class="lang-javascript">
+// Display big numbers with suffixes
+var bigNumber = new _.Block({
+    suffixes: [&quot;&quot;, &quot;k&quot;, &quot;m&quot;, &quot;b&quot;,&quot;t&quot;],
+    toString: function (value) {
+        var newValue = value;
+        if (value &gt;= 1000) {
+            var suffixes = this.suffixes;
+            var suffixNum = Math.floor( (&quot;&quot;+value).length/3 );
+            var shortValue = &#39;&#39;;
+            for (var precision = 2; precision &gt;= 1; precision--) {
+                shortValue = parseFloat( (suffixNum != 0 ? (value / Math.pow(1000,suffixNum) ) : value).toPrecision(precision));
+                var dotLessShortValue = (shortValue + &#39;&#39;).replace(/[^a-zA-Z 0-9]+/g,&#39;&#39;);
+                if (dotLessShortValue.length &lt;= 2) { break; }
+            }
+            if (shortValue % 1 != 0)  shortNum = shortValue.toFixed(1);
+            newValue = shortValue+suffixes[suffixNum];
+        }
+        return newValue;
+    }
+}).define({ // Note how it is easer define property descriptors
+    &#39;value&#39;: {
+        get: function() {
+            return this._value || 0;
+        },
+        set: function(newValue) {
+            if (newValue != this._value) {
+                this.stringValue = this.toString(newValue);
+
+                // Display if we can 
+                if (this.innerHTML !== undefined) {
+                    this.innerHTML = this.stringValue;
+                } 
+            }
+            this._value = newValue;
+        }
+    }
+});
+
+// Check bigNumber
+console.log(&#39;100000 = &#39; + bigNumber.toString(100000)); // 1000000 = 1m 
+</code></pre>
+<h2 id="define-incremental-features-">Define incremental features.</h2>
+<pre><code class="lang-javascript">// Define a new feature to increment a number
+var increment = new _.Block({
+    amount: 1, // Incremental step
+    increment: function(amount) {
+        this.value = (this.value || 0) + (amount || this.amount || 1);
+    }
+});
+
+// Check increment
+{
+    let obj = increment.clone(); // Create a new instance 
+    obj.increment(2);
+    console.log(&#39;Increment 0 + 2 = &#39;, obj.value); // Increment 0 + 2 = 2
+}
+</code></pre>
+<h2 id="create-a-powerful-button-that-can-display-bignumber-and-increment">Create a powerful button that can display  bigNumber and increment</h2>
+<pre><code class="lang-javascript">// Create a dom element and add more features to it
+function createComponent(name, feature1, feature2, feature3) {
+    var el = document.createElement(name);
+
+    // Add our &quot;Block&quot; features but override clone method since we can&#39;t inherit directly from DOM elements
+    arguments[0] = _.mix(el, _.block, {
+        clone: function() {
+            Array.prototype.unshift.call(arguments, createComponent(this.tagName, this));
+            return _.mix.apply(null, arguments);
+        }
+    });
+    var featuredElement = _.mix.apply(null, arguments); // Using composition to add features to the DOM element
+    return featuredElement;
+}
+
+// Increment on click
+let btn = createComponent(&#39;button&#39;, bigNumber, increment); // Note how easy we can create more powerful DOM elements
+btn.addEventListener(&#39;click&#39;, function () {
+    this.increment();
+});
+btn.increment(); // initial value
+
+// Add to the DOM
+var container = document.querySelector(&#39;#example-1-&#39;) || document.body;
+container.appendChild(btn);
+</code></pre>
+<h3 id="example-1-">Example 1:</h3>
+<h2 id="now-we-can-clone-our-button-to-create-more-powerful-buttons-">Now we can clone our button to create more powerful buttons };)</h2>
+<pre><code class="lang-javascript">var biggerBtn = btn.clone({amount: 1000}); 
+biggerBtn.addEventListener(&#39;click&#39;, function () {
+    this.increment();
+});
+biggerBtn.increment();
+var container = document.querySelector(&#39;#example-2-&#39;) || document.body;
+container.appendChild(biggerBtn);
+</code></pre>
+<h3 id="example-2-">Example 2:</h3>
+</article>
+<script src="../tools/demo.js"></script>
+</body>
+</html>

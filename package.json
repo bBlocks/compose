@@ -1,15 +1,17 @@
 {
   "name": "@bblocks/compose",
   "version": "0.1.0",
-  "description": "",
-  "main": "compose.js",
+  "description": "This library is a handy helper if you work with objects, inheritance and composition, like to code efficiently and need to support all modern browser and IE11 without transpiling.",
+  "keywords": ["Object", "Composition", "Inheritance", "defineProperty", "Javascript", "getOwnPropertyDescriptors", "assign"],
+  "main": "compose.umd.js",
   "scripts": {
-    "md": "node md2html.js",
+    "md": "node tools/md2html",
     "watch": "npm-watch",
     "doc": "./node_modules/.bin/jsdoc compose.js -d docs/api/",
     "min": "node ./node_modules/uglify-js/bin/uglifyjs compose.js -c -m --source-map -o compose.min.js",
     "minumd": "node ./node_modules/uglify-js/bin/uglifyjs compose.umd.js -c -m --source-map --includeSources -o compose.umd.min.js",
-    "build": "./node_modules/.bin/babel compose.js --out-file compose.umd.js"
+	"build": "./node_modules/.bin/babel compose.js --out-file compose.umd.js",
+	"prepublish": "npm run build && npm run minumd && npm run doc && npm run doc"
   },
   "watch": {
 	"build": "compose.js",

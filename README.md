@@ -1,14 +1,16 @@
 # Discover super powers of composition and inheritance in javascript with compose library
 
-Jump to 
+This library is a handy helper if you work with objects, inheritance and composition, like to code efficiently and need to support all modern browser and IE11 without transpiling. 
 
 [Quick start](#quick-start)
 
-[Solving problem: Composition of objects keeping property descriptors](#discover-super-powers-of-composition-and-inheritance-in-javascript-with-compose-library)
+[Solving problem #1: Composition of objects keeping property descriptors](#discover-super-powers-of-composition-and-inheritance-in-javascript-with-compose-library)
 
-[Solving problem: IE11 doesn't support Object.assign, Object.getOwnPropertyDescriptors]
+[Solving problem #2: IE11 doesn't support Object.assign, Object.getOwnPropertyDescriptors](#problem-composition-of-objects-keeping-property-descriptors)
 
-[Solving problem: ]
+[Solving problem #3: Bulky code to define properties, inherit and compose object using native javascript methods](#problem-bulky-code-to-define-properties-inherit-and-compose-object-using-native-javascript-methods)
+
+[Have some fun](fun.html)
 
 ## Quick start
 
@@ -25,21 +27,17 @@ include
 
 ```javascript
 // Optionally create shortcuts in lodash style 
-var _ = _ || {};
-_.inherit = compose.inherit; 
-_.compose = compose.compose; 
-_.Block = compose.Block;
-_.block = compose.block;
+var _ = Object.assign(_ || compose); // Now you can use helpers from the library_.mix  _.clone _.Block _.block
 ```
 
 enjoy
 ```javascript
 
 // Composition
-_.compose({prop1: 1}, {prop2: 2});
+_.mix({prop1: 1}, {prop2: 2});
 
 // Inheritance
-_.inherit({prop1: 1}, {prop2: 2}, {foo: function() {}});
+_.clone({prop1: 1}, {prop2: 2}, {foo: function() {}});
 
 // Handy object with built-in features to compose, clone and define properties
 var myObj = new _.Block({prop1:1}); // Our building block
@@ -58,9 +56,9 @@ console.log(myClone.__proto__, myClone.prop1, myClone.prop2, myClone.prop3, myCl
 
 
 ## Problem: Composition of objects keeping property descriptors
-Since ES5 Object in javascript became more powerful. Thanks to property descriptors. 
+Objects became more powerful in javascript since ES5. Now we can create super powerful objects thanks to [property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
 
-In the first example we create and object that can display numbers with suffixes like 1M, 1k, 1b etc...
+Let me show you. In the first example we create and object that can display numbers with suffixes like 1M, 1k, 1b etc...
 
 ```javascript
 // Display big numbers with suffixes
@@ -128,10 +126,10 @@ So we lost all the magic after composition. But you can use "compose" or "inheri
 
 ```javascript
 // Re-define our mixed object
-var myIncNumber = _.inherit(increment);
-_.compose(myIncNumber, bigNumber);
+var myIncNumber = _.clone(increment);
+_.mix(myIncNumber, bigNumber);
 // or
-var myIncNumber2 = _.inherit(increment, bigNumber);
+var myIncNumber2 = _.clone(increment, bigNumber);
 
 
 myIncNumber.increment();
@@ -159,7 +157,7 @@ console.log(sourceObj.prop1 + sourceObj.prop2); // 3
 
 Besides helpful compose and inherit methods the library goes with two polyfills. Including the library automatically fixes the problem in IE11.
 
-## Bulky code to define properties, inherit and compose object using native javascript methods.
+## Problem: Bulky code to define properties, inherit and compose object using native javascript methods
 
 The example above looks bulky in native JS code. 
 
@@ -204,7 +202,3 @@ var myClone = (new _.Block({prop1: 1}))
 // Checking results
 console.log(myClone.prop1 + myClone.prop2 + myClone.prop3 + myClone.prop4); // 1 + 2 + 3 + 4 = 10
 ```
-
-
-
-

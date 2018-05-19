@@ -30,7 +30,7 @@
   * @param {...object} Objects to compose.  target, source1, source2, ...
   * @return {object} Target object.
  */
-	function compose() {
+	function _mix() {
 		var args = arguments,
 		    source = args[0];
 
@@ -57,7 +57,7 @@
   * @param {...object} Prototype and optional additional sources for composition
   * @return {object} New object created from the prototype and results of composition
  */
-	function inherit() {
+	function _clone() {
 		var args = arguments;
 		if (args[0] == undefined) {
 			args[0] = Object.prototype;
@@ -66,7 +66,7 @@
 		if (args.length == 1) {
 			return args[0];
 		}
-		return compose.apply(this, args);
+		return _mix.apply(this, args);
 	}
 
 	// Object.getOwnPropertyDescriptors polyfill for IE11
@@ -133,12 +133,12 @@
 	var block = {
 		mix: function mix() {
 			Array.prototype.unshift.call(arguments, this);
-			compose.apply(this, arguments);
+			_mix.apply(this, arguments);
 			return this;
 		},
 		clone: function clone() {
 			Array.prototype.unshift.call(arguments, this);
-			return inherit.apply(this, arguments);
+			return _clone.apply(this, arguments);
 		},
 		define: function define() {
 			if (!arguments.length) {
@@ -152,11 +152,11 @@
 	};
 	var Block = function Block() {
 		Array.prototype.unshift.call(arguments, this);
-		compose.apply(this, arguments);
+		_mix.apply(this, arguments);
 	};
 	Block.prototype = block;
-	exports.compose = compose;
-	exports.inherit = inherit;
+	exports.mix = _mix;
+	exports.clone = _clone;
 	exports.block = block;
 	exports.Block = Block;
 });

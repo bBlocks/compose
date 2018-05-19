@@ -6,7 +6,7 @@
  * @param {...object} Objects to compose.  target, source1, source2, ...
  * @return {object} Target object.
 */
-function compose() {
+function mix() {
 	var args = arguments,
 		source = args[0];
 	
@@ -14,7 +14,7 @@ function compose() {
 	if (args.length <= 1) { return source; }
 
 	for (var i = 1; i < args.length; i++) {
-		let obj = args[i];
+		var obj = args[i];
 		if (typeof obj != 'object') {
 			console.warn('Invalid parameter type "' + (typeof obj) + '" for the argument #' + i);
 			continue;
@@ -29,17 +29,17 @@ function compose() {
  * @param {...object} Prototype and optional additional sources for composition
  * @return {object} New object created from the prototype and results of composition
 */
-function inherit() {
+function clone() {
 	var args = arguments;
 	if (args[0] == undefined) { args[0] = Object.prototype; }
 	args[0] = Object.create(args[0], Object.getOwnPropertyDescriptors(args[0]));
 	if (args.length == 1) { return args[0]; }
-	return compose.apply(this, args);
+	return mix.apply(this, args);
 }
 
 // Object.getOwnPropertyDescriptors polyfill for IE11
 if (!Object.hasOwnProperty('getOwnPropertyDescriptors')) {
-	let supportsSymbol = Object.hasOwnProperty('getOwnPropertySymbols');
+	var supportsSymbol = Object.hasOwnProperty('getOwnPropertySymbols');
 	Object.defineProperty(
 		Object,
 		'getOwnPropertyDescriptors',
@@ -105,27 +105,27 @@ if (!Object.assign) {
 /**
  * Building block with handy methods
  */
-let block = {
+var block = {
 	mix: function() {
 		Array.prototype.unshift.call(arguments, this);
-		compose.apply(this, arguments);
+		mix.apply(this, arguments);
 		return this;
 	},
 	clone: function() {
 		Array.prototype.unshift.call(arguments, this);
-		return inherit.apply(this, arguments);
+		return clone.apply(this, arguments);
 	},
 	define: function() {
 		if (!arguments.length) {return this;}
-		for (let i=0; i<arguments.length; i++) {
+		for (var i=0; i<arguments.length; i++) {
 			Object.defineProperties(this, arguments[i]);
 		}
 		return this;
 	}
 }
-let Block = function() {
+var Block = function() {
 	Array.prototype.unshift.call(arguments, this);
-	compose.apply(this, arguments);
+	mix.apply(this, arguments);
 };
 Block.prototype = block;
-export {compose, inherit, block, Block};
+export {mix, clone, block, Block};
