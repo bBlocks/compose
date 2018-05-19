@@ -30,14 +30,14 @@ href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/de
 <p><a href="#discover-super-powers-of-composition-and-inheritance-in-javascript-with-compose-library">Solving problem #1: Composition of objects keeping property descriptors</a></p>
 <p><a href="#problem-composition-of-objects-keeping-property-descriptors">Solving problem #2: IE11 doesn&#39;t support Object.assign, Object.getOwnPropertyDescriptors</a></p>
 <p><a href="#problem-bulky-code-to-define-properties-inherit-and-compose-object-using-native-javascript-methods">Solving problem #3: Bulky code to define properties, inherit and compose object using native javascript methods</a></p>
-<p><a href="fun.html">Have some fun</a></p>
+<p><a href="https://bblocks.github.io/compose/fun.html">Have some fun</a></p>
 <h2 id="quick-start">Quick start</h2>
 <p>install</p>
 <pre><code class="lang-nmp">npm install @bblocks/compose --save-dev
 </code></pre>
 <p>include</p>
 <pre><code class="lang-html">&lt;!-- include the library --&gt;
-&lt;script src=&quot;../compose.umd.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.1/compose.umd.js&quot;&gt;&lt;/script&gt;
 </code></pre>
 <pre><code class="lang-javascript">// Optionally create shortcuts in lodash style 
 var _ = Object.assign(_ || compose); // Now you can use helpers from the library_.mix  _.clone _.Block _.block
@@ -123,7 +123,7 @@ incNumber.increment(); // value = 1;
 console.log(incNumber.value); // 1
 console.log(incNumber.stringValue); // undefined :(
 </code></pre>
-<p>So we lost all the magic after composition. But you can use &quot;compose&quot; or &quot;inherit&quot; methods from the library to solve this problem.</p>
+<p>So we lost all the magic after composition. But you can use <strong>mix</strong> or <strong>clone</strong> methods from the library to solve this problem.</p>
 <pre><code class="lang-javascript">// Re-define our mixed object
 var myIncNumber = _.clone(increment);
 _.mix(myIncNumber, bigNumber);
@@ -147,7 +147,7 @@ var extraObj = Object.defineProperty({}, &#39;prop2&#39;, {get: function() {retu
 Object.defineProperties(sourceObj, Object.getOwnPropertyDescriptors(extraObj)); // Fails in IE11. Object doesn&#39;t support property or method &#39;getOwnPropertyDescriptors&#39;
 console.log(sourceObj.prop1 + sourceObj.prop2); // 3
 </code></pre>
-<p>Besides helpful compose and inherit methods the library goes with two polyfills. Including the library automatically fixes the problem in IE11.</p>
+<p>Besides helpful <strong>mix</strong> and <strong>clone</strong> methods the library goes with two polyfills. Including the library automatically fixes the problem in IE11.</p>
 <h2 id="problem-bulky-code-to-define-properties-inherit-and-compose-object-using-native-javascript-methods">Problem: Bulky code to define properties, inherit and compose object using native javascript methods</h2>
 <p>The example above looks bulky in native JS code. </p>
 <pre><code class="lang-javascript">var sourceObj = {prop1:1};

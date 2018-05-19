@@ -1,6 +1,6 @@
 {
   "name": "@bblocks/compose",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "This library is a handy helper if you work with objects, inheritance and composition, like to code efficiently and need to support all modern browser and IE11 without transpiling.",
   "keywords": ["Object", "Composition", "Inheritance", "defineProperty", "Javascript", "getOwnPropertyDescriptors", "assign"],
   "main": "compose.umd.js",

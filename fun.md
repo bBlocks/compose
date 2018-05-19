@@ -7,7 +7,7 @@ Let's use [compose library](index.html) to  build a mini incremental game.
 
 ```html
 <!-- include the library -->
-<script src="../compose.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.1/compose.umd.js"></script>
 ```
 
 ```javascript
@@ -16,9 +16,9 @@ var _ = Object.assign(_ || {}, compose); // Now you can use it like _.mix(...)  
 
 ```
 
-## Create a bigNumber feature
+## Create a big number feature
 
-We can improve our original example to make it more efficient.
+We can improve our [original example](index.html#discover-super-powers-of-composition-and-inheritance-in-javascript-with-compose-library) to make it more efficient.
 
 ```javascript
 
@@ -41,7 +41,7 @@ var bigNumber = new _.Block({
 		}
 		return newValue;
 	}
-}).define({ // Note how it is easer to define property descriptors
+}).define({ // Note how it is easier to define property descriptors
 	'value': {
 		get: function() {
 			return this._value || 0;
@@ -112,7 +112,7 @@ container.appendChild(btn);
 
 ### Example 1: 
 
-## Now we can clone our button to create more powerful buttons };)
+## Now we can clone our button to create more powerful buttons :smiling_imp:
 ```javascript
 var biggerBtn = btn.clone({amount: 1000}); 
 biggerBtn.addEventListener('click', function () {

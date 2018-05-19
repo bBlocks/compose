@@ -10,7 +10,7 @@ This library is a handy helper if you work with objects, inheritance and composi
 
 [Solving problem #3: Bulky code to define properties, inherit and compose object using native javascript methods](#problem-bulky-code-to-define-properties-inherit-and-compose-object-using-native-javascript-methods)
 
-[Have some fun](fun.html)
+[Have some fun](https://bblocks.github.io/compose/fun.html)
 
 ## Quick start
 
@@ -22,7 +22,7 @@ npm install @bblocks/compose --save-dev
 include
 ```html
 <!-- include the library -->
-<script src="../compose.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.1/compose.umd.js"></script>
 ```
 
 ```javascript
@@ -122,7 +122,7 @@ console.log(incNumber.value); // 1
 console.log(incNumber.stringValue); // undefined :(
 ```
 
-So we lost all the magic after composition. But you can use "compose" or "inherit" methods from the library to solve this problem.
+So we lost all the magic after composition. But you can use **mix** or **clone** methods from the library to solve this problem.
 
 ```javascript
 // Re-define our mixed object
@@ -155,7 +155,7 @@ Object.defineProperties(sourceObj, Object.getOwnPropertyDescriptors(extraObj)); 
 console.log(sourceObj.prop1 + sourceObj.prop2); // 3
 ```
 
-Besides helpful compose and inherit methods the library goes with two polyfills. Including the library automatically fixes the problem in IE11.
+Besides helpful **mix** and **clone** methods the library goes with two polyfills. Including the library automatically fixes the problem in IE11.
 
 ## Problem: Bulky code to define properties, inherit and compose object using native javascript methods
 

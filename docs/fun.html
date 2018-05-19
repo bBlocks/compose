@@ -28,14 +28,14 @@ href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/de
 <p>Let&#39;s use <a href="index.html">compose library</a> to  build a mini incremental game.</p>
 <h2 id="install-and-include-the-library-">Install and include the library.</h2>
 <pre><code class="lang-html">&lt;!-- include the library --&gt;
-&lt;script src=&quot;../compose.umd.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.1/compose.umd.js&quot;&gt;&lt;/script&gt;
 </code></pre>
 <pre><code class="lang-javascript">// Optionally create shortcuts in lodash style 
 var _ = Object.assign(_ || {}, compose); // Now you can use it like _.mix(...)  _.clone(...)  new _.Block(...) _.block
 
 </code></pre>
-<h2 id="create-a-bignumber-feature">Create a bigNumber feature</h2>
-<p>We can improve our original example to make it more efficient.</p>
+<h2 id="create-a-big-number-feature">Create a big number feature</h2>
+<p>We can improve our <a href="index.html#discover-super-powers-of-composition-and-inheritance-in-javascript-with-compose-library">original example</a> to make it more efficient.</p>
 <pre><code class="lang-javascript">
 // Display big numbers with suffixes
 var bigNumber = new _.Block({
@@ -56,7 +56,7 @@ var bigNumber = new _.Block({
         }
         return newValue;
     }
-}).define({ // Note how it is easer define property descriptors
+}).define({ // Note how it is easier to define property descriptors
     &#39;value&#39;: {
         get: function() {
             return this._value || 0;
@@ -122,7 +122,7 @@ var container = document.querySelector(&#39;#example-1-&#39;) || document.body;
 container.appendChild(btn);
 </code></pre>
 <h3 id="example-1-">Example 1:</h3>
-<h2 id="now-we-can-clone-our-button-to-create-more-powerful-buttons-">Now we can clone our button to create more powerful buttons };)</h2>
+<h2 id="now-we-can-clone-our-button-to-create-more-powerful-buttons-smiling_imp-">Now we can clone our button to create more powerful buttons :smiling_imp:</h2>
 <pre><code class="lang-javascript">var biggerBtn = btn.clone({amount: 1000}); 
 biggerBtn.addEventListener(&#39;click&#39;, function () {
     this.increment();
@@ -132,6 +132,7 @@ var container = document.querySelector(&#39;#example-2-&#39;) || document.body;
 container.appendChild(biggerBtn);
 </code></pre>
 <h3 id="example-2-">Example 2:</h3>
+<p>Hope you enjoyed it!</p>
 </article>
 <script src="../tools/demo.js"></script>
 </body>
