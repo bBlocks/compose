@@ -32,7 +32,7 @@ href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/de
 			}
 		}
 	</style>
-	<script src="../compose.umd.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.1/compose.umd.js"></script>
 </head>
 <body>
 <article class="markdown-body">
