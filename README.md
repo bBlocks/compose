@@ -12,6 +12,8 @@ This library is a handy helper if you work with objects, inheritance and composi
 
 [Have some fun](https://bblocks.github.io/compose/fun.html)
 
+
+
 ## Quick start
 
 install
@@ -19,19 +21,23 @@ install
 npm install @bblocks/compose --save-dev
 ```
 
-include
+include in the library
 ```html
-<!-- include the library -->
-<script src="https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.1/compose.umd.js"></script>
+<!-- In HTML -->
+<script src="https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.2/compose.umd.js"></script> <!--  node_modules/@bblocks/compose/compose.js -->
 ```
-
+Nodejs
+```
+var compose = require('@bblocks/compose');
+```
+ES6
+```
+import *  as compose from 'https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.2/compose.js'; // node_modules/@bblocks/compose/compose.js
+```
+enjoy 
 ```javascript
 // Optionally create shortcuts in lodash style 
-var _ = Object.assign(_ || compose); // Now you can use helpers from the library_.mix  _.clone _.Block _.block
-```
-
-enjoy
-```javascript
+var _ = Object.assign(_ || {}, compose); // Now you can use helpers from the library_.mix  _.clone _.Block _.block
 
 // Composition
 _.mix({prop1: 1}, {prop2: 2});
@@ -53,7 +59,6 @@ var myClone = myObj
 // Check results
 console.log(myClone.__proto__, myClone.prop1, myClone.prop2, myClone.prop3, myClone.prop4); // {...} 1 2 3 4
 ```
-
 
 ## Problem: Composition of objects keeping property descriptors
 Objects became more powerful in javascript since ES5. Now we can create super powerful objects thanks to [property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).

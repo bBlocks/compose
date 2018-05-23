@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 	<link rel="stylesheet"
 href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
 	<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
@@ -23,6 +24,7 @@ href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/de
 	<script src="https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.1/compose.umd.js"></script>
 </head>
 <body>
+<p><a href="https://github.com/bBlocks/compose/">Repository</a> | <a href="https://bblocks.github.io/compose/index.html">Demo</a></p>
 <article class="markdown-body">
 <h1 id="discover-super-powers-of-composition-and-inheritance-in-javascript-with-compose-library">Discover super powers of composition and inheritance in javascript with compose library</h1>
 <p>This library is a handy helper if you work with objects, inheritance and composition, like to code efficiently and need to support all modern browser and IE11 without transpiling. </p>
@@ -35,15 +37,18 @@ href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/de
 <p>install</p>
 <pre><code class="lang-nmp">npm install @bblocks/compose --save-dev
 </code></pre>
-<p>include</p>
-<pre><code class="lang-html">&lt;!-- include the library --&gt;
-&lt;script src=&quot;https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.1/compose.umd.js&quot;&gt;&lt;/script&gt;
+<p>include in the library</p>
+<pre><code class="lang-html">&lt;!-- In HTML --&gt;
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.2/compose.umd.js&quot;&gt;&lt;/script&gt; &lt;!--  node_modules/@bblocks/compose/compose.js --&gt;
 </code></pre>
+<p>Nodejs</p>
+<pre><code>var compose = require(&#39;@bblocks/compose&#39;);
+</code></pre><p>ES6</p>
+<pre><code>import *  as compose from &#39;https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.2/compose.js&#39;; // node_modules/@bblocks/compose/compose.js
+</code></pre><p>enjoy </p>
 <pre><code class="lang-javascript">// Optionally create shortcuts in lodash style 
-var _ = Object.assign(_ || compose); // Now you can use helpers from the library_.mix  _.clone _.Block _.block
-</code></pre>
-<p>enjoy</p>
-<pre><code class="lang-javascript">
+var _ = Object.assign(_ || {}, compose); // Now you can use helpers from the library_.mix  _.clone _.Block _.block
+
 // Composition
 _.mix({prop1: 1}, {prop2: 2});
 

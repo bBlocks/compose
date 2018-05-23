@@ -13,6 +13,7 @@ function convert(src, dest) {
 		var html = `<!DOCTYPE html>
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 	<link rel="stylesheet"
 href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/default.min.css">
 	<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/highlight.min.js"></script>
@@ -35,6 +36,7 @@ href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/de
 	<script src="https://cdn.jsdelivr.net/npm/@bblocks/compose@0.1.1/compose.umd.js"></script>
 </head>
 <body>
+<p><a href="https://github.com/bBlocks/compose/">Repository</a> | <a href="https://bblocks.github.io/compose/index.html">Demo</a></p>
 <article class="markdown-body">
 ${marked(data.toString())}</article>
 <script src="demo.js"></script>
