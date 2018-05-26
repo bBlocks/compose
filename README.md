@@ -60,10 +60,15 @@ var myClone = myObj
 console.log(myClone.__proto__, myClone.prop1, myClone.prop2, myClone.prop3, myClone.prop4); // {...} 1 2 3 4
 ```
 
+Here is how you can visualize what we achieved.
+![model](https://i.imgur.com/LGKIQFJ.png)
+
 ## Problem: Composition of objects keeping property descriptors
 Objects became more powerful in javascript since ES5. Now we can create super powerful objects thanks to [property descriptors](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
 
 Let me show you. In the first example we create and object that can display numbers with suffixes like 1M, 1k, 1b etc...
+
+![model](https://i.imgur.com/qQ8CS4c.png)
 
 ```javascript
 // Display big numbers with suffixes

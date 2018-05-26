@@ -87,11 +87,14 @@ describe("inherit", function () {
 		var obj = {test:1};
 		
 		var obj1 = {prop1: 1, prop2: foo, prop3: obj};
+		Object.defineProperty(obj1, 'test', {get: function() {return 'test';}});
+	
 		var obj2 = {prop2:2};
 
 		var obj11 = _.clone(obj1);
 		expect(obj1.isPrototypeOf(obj11)).toBeTruthy();
 		expect(obj11.prop2).toBeTruthy();
+		expect(obj11.test).toBe('test');
 	});
 });
 

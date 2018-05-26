@@ -2,6 +2,9 @@
 
 Let's use [compose library](https://github.com/bBlocks/compose/) to  build a mini incremental game.
 
+![model](https://i.imgur.com/gcR5829.png
+)
+
 
 ## Install and include the library.
 

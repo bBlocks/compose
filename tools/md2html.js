@@ -54,4 +54,4 @@ ${marked(data.toString())}</article>
 }
 
 convert('README.md', 'docs/index.html');
-convert('fun.md', 'docs/fun.html');
+convert('tools/fun.md', 'docs/fun.html');
