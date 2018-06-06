@@ -1,3 +1,5 @@
+![](https://travis-ci.com/bBlocks/compose.svg?branch=master)
+
 # Discover super powers of composition and inheritance in javascript with compose library
 
 This library is a handy helper if you work with objects, inheritance and composition, like to code efficiently and need to support all modern browser and IE11 without transpiling. 
